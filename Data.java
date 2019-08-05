@@ -1,6 +1,7 @@
 package coursebundle;
 
 // TODO add documentation and unit tests
+// TODO sort the courses list
 
 public class Data {
     private int len;
