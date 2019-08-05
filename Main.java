@@ -1,6 +1,6 @@
-package coursebundle;
+package coursebundler;
 
-import coursebundle.Data;
+import coursebundler.Data;
 
 public class Main {
     public static void main(String[] args){

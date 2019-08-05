@@ -1,6 +1,6 @@
-package coursebundle;
+package coursebundler;
 
-import coursebundle.*;
+import coursebundler.*;
 import java.util.ArrayList;
 
 public class Bundler {
