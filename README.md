@@ -1,5 +1,5 @@
-## Project name: courseOpt
-courseOpt stands for course Options, because the app generates all the available course options (or course bundles) given a set of courses and rules.
+## Project name: coursebundler
+coursebundler is an app that generates all the available course options (or course bundles) given a set of courses and rules.
 
 ## Function
 App receives a list of modules with a few attributes like: 
