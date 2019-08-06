@@ -2,10 +2,11 @@ package coursebundler;
 
 import coursebundler.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Bundler {
     private Data courses;
-    private ArrayList<Bundle> bundles;
+    private ArrayList<String[]> bundles;
     private int lenBundle;
 
     // Setter and getter methods
@@ -16,7 +17,7 @@ public class Bundler {
         return this.courses;
     }
 
-    public ArrayList<Bundle> getBundles(){
+    public ArrayList<String[]> getBundles(){
         return this.bundles;
     }
 
@@ -30,8 +31,7 @@ public class Bundler {
     // Interface methods
     public void printBundles(){
         for (int i=0; i<this.bundles.size(); i++){
-            System.out.println("-------------------------------");
-            this.bundles.get(i).printBundle();
+            System.out.println(Arrays.toString(this.bundles.get(i)));
         }
     }
 
@@ -50,7 +50,7 @@ public class Bundler {
     private void findBundles(int startIdx, Bundle curBundle){
         // Base case
         if (curBundle.isFull()){ // if bundle has filled
-            this.bundles.add(curBundle);
+            this.bundles.add(curBundle.getBundleCourseCodes());
             return;
         }
 
@@ -68,7 +68,7 @@ public class Bundler {
     public void findBundles(){
         // interface class
 
-        this.bundles = new ArrayList<Bundle>();
+        this.bundles = new ArrayList<String[]>();
         findBundles(0, new Bundle(this.lenBundle));
     }
 
@@ -103,6 +103,14 @@ class Bundle {
         for (int i=0; i<this.lenBundle; i++){
             this.bundle[i].printCourse();
         }
+    }
+
+    public String[] getBundleCourseCodes(){
+        String[] codes = new String[this.lenBundle];
+        for (int i=0; i<this.lenBundle; i++){
+            codes[i] = this.bundle[i].getCode();
+        }
+        return codes;
     }
 
     private int mapFromTermToInt(String term){
