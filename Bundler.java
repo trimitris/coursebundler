@@ -27,10 +27,24 @@ public class Bundler {
         return this.lenBundle;
     }
 
+    // Interface methods
+    public void printBundles(){
+        for (int i=0; i<bundles.size(); i++){
+            this.bundles.get(i).printBundle();
+            System.out.println("-------------------------------");
+        }
+    }
+
     // Algorithm methods
     private boolean checkRules(Bundle curBundle, Course curCourse){
-        // TODO check rules
-        return true;
+        // TODO incorporate other rules as well
+
+        // current rule: must have 4 courses in M and 4 in L
+        if (curBundle.getNumPerTerm(curCourse.getTerm())<4) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void findBundles(int startIdx, Bundle curBundle){
@@ -73,12 +87,33 @@ class Bundle {
     // this class represents a set of courses that a student might take for an academic year or similar
     // works like a stack. You can only push and pop courses
 
-    int lenBundle;
-    Course[] bundle;
-    int count;
+    private int lenBundle;
+    private Course[] bundle;
+    private int count;
+    private int[] numPerTerm; // represents number of courses currently in the bundle per term. numPerTerm[0] is for M, and numPerTerm[1] is for L
 
     public Course[] getBundle(){
         return this.bundle;
+    }
+
+    public int getNumPerTerm(String term){
+        return this.numPerTerm[mapFromTermToInt(term)];
+    }
+
+    public void printBundle(){
+        for (int i=0; i<lenBundle; i++){
+            this.bundle[i].printCourse();
+        }
+    }
+
+    private int mapFromTermToInt(String term){
+        if (term.equals("M")) {
+            return 0;
+        } else if (term.equals("L")) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 
     public void addCourse(Course course){
@@ -88,6 +123,7 @@ class Bundle {
             return;
         }
         this.bundle[count] = course;
+        this.numPerTerm[mapFromTermToInt(course.getTerm())]++;
         this.count++;
     }
 
@@ -96,8 +132,9 @@ class Bundle {
         if (count == 0){
             return;
         }
-        this.bundle[count] = null;
         this.count--;
+        this.numPerTerm[mapFromTermToInt(this.bundle[count].getTerm())]--;
+        this.bundle[count] = null;
     }
 
     public boolean isFull(){
@@ -112,5 +149,6 @@ class Bundle {
         this.lenBundle = len;
         this.bundle = new Course[lenBundle];
         this.count = 0;
+        this.numPerTerm = new int[2];
     }
 }

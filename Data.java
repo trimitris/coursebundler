@@ -14,9 +14,21 @@ public class Data {
     }
 
     public void generate(){
-        String[] codes = {"4e1", "4e2", "4e3"};
-        String[] names = {"Management of technology", "Project management", "Computer vision"};
-        String[] term = {"M", "L", "L"};
+        String[] codes = {"4e1", "4e4", "4e11", "4e12", "4f5","4f7", "4f8", "4f10", "4f12", "4m12", "4m17", "4m21"};
+        String[] names = {
+            "Innovation and strategic management of intellectual property",
+            "management of technology",
+            "Strategic management",
+            "project management",
+            "advanced information theory and coding",
+            "statistical signal analysis",
+            "image processing and image coding",
+            "Deep learning and structured data",
+            "Computer vision",
+            "Pdes and variational methods",
+            "Practical optimozation",
+            "Software engineering and design"};
+        String[] term = {"M","M","L","L","L","L","L","M","M","L","M","L"};
 
         for (int i=0; i<this.len; i++){
             Course module = new Course(codes[i], names[i], term[i]);

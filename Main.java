@@ -1,12 +1,17 @@
 package coursebundler;
 
-import coursebundler.Data;
+import coursebundler.*;
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args){
-        Data database = new Data(3);
-        for (int i=0; i<database.getLength(); i++){
-            database.getCourse(i).printCourse();
+        Data courses = new Data(12);
+        for (int i=0; i<courses.getLength(); i++){
+            courses.getCourse(i).printCourse();
         }
+
+        Bundler bundler = new Bundler(courses, 8);
+        bundler.printBundles();
+
     }
 }
