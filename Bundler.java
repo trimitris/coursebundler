@@ -29,9 +29,9 @@ public class Bundler {
 
     // Interface methods
     public void printBundles(){
-        for (int i=0; i<bundles.size(); i++){
-            this.bundles.get(i).printBundle();
+        for (int i=0; i<this.bundles.size(); i++){
             System.out.println("-------------------------------");
+            this.bundles.get(i).printBundle();
         }
     }
 
@@ -50,17 +50,16 @@ public class Bundler {
     private void findBundles(int startIdx, Bundle curBundle){
         // Base case
         if (curBundle.isFull()){ // if bundle has filled
-            bundles.add(curBundle);
+            this.bundles.add(curBundle);
             return;
         }
 
         // Compound case
-        for (int i=startIdx; i<courses.getLength(); i++){
-            Course curCourse = courses.getCourse(i);
+        for (int i=startIdx; i<this.courses.getLength(); i++){
+            Course curCourse = this.courses.getCourse(i);
             if (checkRules(curBundle, curCourse)){
                 curBundle.addCourse(curCourse);
-                startIdx = i+1;
-                findBundles(startIdx, curBundle);
+                findBundles(i+1, curBundle);
                 curBundle.removeLastCourse();
             }
         }
@@ -101,7 +100,7 @@ class Bundle {
     }
 
     public void printBundle(){
-        for (int i=0; i<lenBundle; i++){
+        for (int i=0; i<this.lenBundle; i++){
             this.bundle[i].printCourse();
         }
     }
@@ -139,12 +138,14 @@ class Bundle {
 
     public boolean isFull(){
         // returns if the bundle is full
-        if (count == lenBundle){
+        if (count >= lenBundle){
             return true;
         } else {
             return false;
         }
     }
+
+    // Constructor
     public Bundle(int len){
         this.lenBundle = len;
         this.bundle = new Course[lenBundle];
