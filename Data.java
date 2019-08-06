@@ -14,7 +14,8 @@ public class Data {
     }
 
     public void generate(){
-        String[] codes = {"4e1", "4e4", "4e11", "4e12", "4f5","4f7", "4f8", "4f10", "4f12", "4m12", "4m17", "4m21"};
+        String[] codes = {"4e1", "4e4", "4e11", "4e12", "4f5","4f7", "4f8",
+            "4f10", "4f12", "4m12", "4m17", "4m21"};
         String[] names = {
             "Innovation and strategic management of intellectual property",
             "management of technology",
@@ -26,12 +27,14 @@ public class Data {
             "Deep learning and structured data",
             "Computer vision",
             "Pdes and variational methods",
-            "Practical optimozation",
+            "Practical optimization",
             "Software engineering and design"};
         String[] term = {"M","M","L","L","L","L","L","M","M","L","M","L"};
+        Boolean[] managerial = {true, true, true, true, false, false, false,
+            false, false, false, false, false};
 
         for (int i=0; i<this.len; i++){
-            Course module = new Course(codes[i], names[i], term[i]);
+            Course module = new Course(codes[i], names[i], term[i], managerial[i]);
             this.courses[i] = module;
         }
     }
@@ -50,11 +53,13 @@ class Course {
     private String code;
     private String name;
     private String term;
+    private Boolean managerial;
 
-    public Course(String code, String name, String term){
+    public Course(String code, String name, String term, Boolean managerial){
         setCode(code);
         setName(name);
         setTerm(term);
+        setManagerial(managerial);
     }
 
     public void setCode(String code){
@@ -78,7 +83,14 @@ class Course {
         return this.term;
     }
 
+    public void setManagerial(Boolean managerial){
+        this.managerial = managerial;
+    }
+    public Boolean getManagerial(){
+        return this.managerial;
+    }
+
     public void printCourse(){
-        System.out.println("Code: " + getCode() + ", " + "Name: " + getName() + ", " + "Term: " + getTerm());
+        System.out.println("Code: " + getCode() + ", " + "Name: " + getName() + ", " + "Term: " + getTerm() + ", " + "Managerial: " + getManagerial());
     }
 }

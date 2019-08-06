@@ -39,12 +39,15 @@ public class Bundler {
     private boolean checkRules(Bundle curBundle, Course curCourse){
         // TODO incorporate other rules as well
 
-        // current rule: must have 4 courses in M and 4 in L
-        if (curBundle.getNumPerTerm(curCourse.getTerm())<4) {
-            return true;
-        } else {
+        // first rule: must have 4 courses in M and 4 in L
+        if (curBundle.getNumPerTerm(curCourse.getTerm())>3) {
             return false;
         }
+        // second rule: must only have 1 management module
+        if ((curCourse.getManagerial()) && (curBundle.getNumManagerial()>0)){
+            return false;
+        }
+        return true;
     }
 
     private void findBundles(int startIdx, Bundle curBundle){
@@ -66,7 +69,7 @@ public class Bundler {
     }
 
     public void findBundles(){
-        // interface class
+        // interface method
 
         this.bundles = new ArrayList<String[]>();
         findBundles(0, new Bundle(this.lenBundle));
@@ -90,6 +93,7 @@ class Bundle {
     private Course[] bundle;
     private int count;
     private int[] numPerTerm; // represents number of courses currently in the bundle per term. numPerTerm[0] is for M, and numPerTerm[1] is for L
+    private int numManagerial;
 
     public Course[] getBundle(){
         return this.bundle;
@@ -97,6 +101,10 @@ class Bundle {
 
     public int getNumPerTerm(String term){
         return this.numPerTerm[mapFromTermToInt(term)];
+    }
+
+    public int getNumManagerial(){
+        return this.numManagerial;
     }
 
     public void printBundle(){
@@ -131,6 +139,9 @@ class Bundle {
         }
         this.bundle[count] = course;
         this.numPerTerm[mapFromTermToInt(course.getTerm())]++;
+        if (course.getManagerial()){
+            this.numManagerial++;
+        }
         this.count++;
     }
 
@@ -141,6 +152,9 @@ class Bundle {
         }
         this.count--;
         this.numPerTerm[mapFromTermToInt(this.bundle[count].getTerm())]--;
+        if (this.bundle[count].getManagerial()){
+            this.numManagerial--;
+        }
         this.bundle[count] = null;
     }
 
@@ -159,5 +173,6 @@ class Bundle {
         this.bundle = new Course[lenBundle];
         this.count = 0;
         this.numPerTerm = new int[2];
+        this.numManagerial = 0;
     }
 }
