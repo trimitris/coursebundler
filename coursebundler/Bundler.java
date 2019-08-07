@@ -1,6 +1,5 @@
 package coursebundler;
 
-import coursebundler.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
