@@ -71,8 +71,8 @@ public class Bundler {
         }
 
         // Compound case
-        for (int i=startIdx; i<this.courses.getLength(); i++){
-            Course curCourse = this.courses.getCourse(i);
+        for (int i = startIdx; i<this.courses.getNumCourses(); i++){
+            Course curCourse = this.courses.getCourseByIdx(i);
             if (checkRules(curBundle, curCourse)){
                 curBundle.addCourse(curCourse);
                 findBundles(i+1, curBundle);

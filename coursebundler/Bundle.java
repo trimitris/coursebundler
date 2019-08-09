@@ -93,10 +93,6 @@ public class Bundle {
 
     public boolean isFull(){
         // returns if the bundle is full
-        if (count >= lenBundle){
-            return true;
-        } else {
-            return false;
-        }
+        return count >= lenBundle;
     }
 }

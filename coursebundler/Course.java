@@ -1,5 +1,8 @@
 package coursebundler;
 
+/**
+ * Course class represents an academic course that can take place over a single term.
+ */
 public class Course {
     private String code;
     private String name;
@@ -42,12 +45,17 @@ public class Course {
         return this.managerial;
     }
 
+    /**
+     * Prints the atttributes of the course class to stdout.
+     */
     public void printCourse(){
         System.out.println("Code: " + getCode() + ", " + "Name: " + getName() + ", " + "Term: " + getTerm() + ", " + "Managerial: " + getManagerial());
     }
 }
 
-// Represents the Cambridge terms (when the different modules take place)
+/**
+ * Represents the Cambridge terms (Michaelmas, Lent, Easter)
+ */
 enum Term {
     M, // Michaelmas
     L, // Lent

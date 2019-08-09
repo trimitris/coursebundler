@@ -3,7 +3,7 @@ package coursebundler;
 public class Main {
     public static void main(String[] args){
         // Build a data object
-        Data courses = new Data(12);
+        Data courses = new Data();
 
         // Generate and print all course bundles that obey the rules
         Bundler bundler = new Bundler(courses, 8);
