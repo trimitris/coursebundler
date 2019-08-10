@@ -3,13 +3,23 @@ package coursebundler;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Bundler {
+/**
+ * Builds all possible combinations of courses (bundles) that follow the rules.
+ * Examples of rules are: number of courses per term, number of management courses per academic year.
+ */
+public class BundleBuilder {
     private Data courses;
     private ArrayList<String[]> bundles; // list of bundles represented only by the course codes of its members, and NOT bundle objects
     private final int lenBundle;
 
     // Constructor
-    public Bundler(Data courses, int lenBundle) {
+
+    /**
+     * Creates a BundleBuilder object
+     * @param courses instance of Data class, represents available courses for academic year
+     * @param lenBundle is the permitted number of courses in a course combination
+     */
+    public BundleBuilder(Data courses, int lenBundle) {
         // TODO add exceptions for lenBundle smaller than 1, empty courses object etc
 
         setCourses(courses);
@@ -25,6 +35,10 @@ public class Bundler {
         return this.courses;
     }
 
+    /**
+     * Returns list of bundles (in this context, bundles contain course codes and not course objects)
+     * @return list of bundles
+     */
     public ArrayList<String[]> getBundles(){
         return this.bundles;
     }
@@ -34,6 +48,10 @@ public class Bundler {
     }
 
     // Interface methods
+
+    /**
+     * Prints all possible combination of courses that follow the rules
+     */
     public void printBundles(){
         // prints course codes in each bundle
         for (int i=0; i<this.bundles.size(); i++){
@@ -41,7 +59,7 @@ public class Bundler {
         }
     }
 
-    public void findBundles(){
+    private void findBundles(){
         // interface method - starts the recursive call
 
         this.bundles = new ArrayList<String[]>();
@@ -50,6 +68,8 @@ public class Bundler {
 
     // Algorithm methods
     private boolean checkRules(Bundle curBundle, Course curCourse){
+        // Implements rules
+        // Assumes curBundle obeys the rules, and checks if adding curCourse to it violates the rules.
         // TODO incorporate other rules as well
 
         // first rule: must have 4 courses in M and 4 in L
@@ -64,6 +84,8 @@ public class Bundler {
     }
 
     private void findBundles(int startIdx, Bundle curBundle){
+        // Iterates through all possible combination of courses, and generates bundles if they follow the rules
+
         // Base case
         if (curBundle.isFull()){ // if bundle has filled
             this.bundles.add(curBundle.getBundleCourseCodes());
