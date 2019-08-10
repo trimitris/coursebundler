@@ -20,7 +20,8 @@ public class BundleBuilder {
      * @param lenBundle is the permitted number of courses in a course combination
      */
     public BundleBuilder(Data courses, int lenBundle) {
-        // TODO add exceptions for lenBundle smaller than 1, empty courses object etc
+        if (lenBundle < 1) throw new IllegalArgumentException("Length of bundle shouldn't be less than 1");
+        if (courses == null) throw new NullPointerException("courses data cannot be null");
 
         setCourses(courses);
         this.lenBundle = lenBundle;
@@ -28,7 +29,7 @@ public class BundleBuilder {
     }
 
     // Setter and getter methods
-    public void setCourses(Data courses){
+    private void setCourses(Data courses){
         this.courses = courses;
     }
     public Data getCourses(){
@@ -67,6 +68,7 @@ public class BundleBuilder {
     }
 
     // Algorithm methods
+
     private boolean checkRules(Bundle curBundle, Course curCourse){
         // Implements rules
         // Assumes curBundle obeys the rules, and checks if adding curCourse to it violates the rules.

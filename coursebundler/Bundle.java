@@ -21,6 +21,8 @@ public class Bundle {
      * @param len number of courses in bundle
      */
     public Bundle(int len){
+        if (len < 1) throw new IllegalArgumentException("Length of bundle shouldn't be less than 1");
+
         // initialize attributes
         this.lenBundle = len;
         this.bundle = new Course[lenBundle];
@@ -82,16 +84,15 @@ public class Bundle {
     }
 
     /**
-     * Adds given course to the bundle, and updates other class attributes
+     * Adds given course to the bundle, and updates other class attributes.
      * @param course academic course
+     * @throws IllegalStateException if bundle is already full
      */
-    public void addCourse(Course course){
+    public void addCourse(Course course) throws IllegalStateException{
         // push course at end of the "stack"
 
         if (isFull()){
-            // TODO throw exception when bundle is full
-            System.out.println("Bundle is already full");
-            return;
+            throw new IllegalStateException("Can't add course to bundle, it is already full");
         }
         this.bundle[count] = course;
 
