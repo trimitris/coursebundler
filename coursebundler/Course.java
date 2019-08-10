@@ -1,7 +1,7 @@
 package coursebundler;
 
 /**
- * Course class represents an academic course that can take place over a single term.
+ * Represents an academic course that can take place over a single term.
  */
 public class Course {
     private String code;

@@ -53,7 +53,7 @@ public class Bundler {
         // TODO incorporate other rules as well
 
         // first rule: must have 4 courses in M and 4 in L
-        if (curBundle.getNumPerTerm(curCourse.getTerm())>3) {
+        if (curBundle.getNumForTerm(curCourse.getTerm())>3) {
             return false;
         }
         // second rule: must only have 1 management module

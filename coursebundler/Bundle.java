@@ -2,10 +2,12 @@ package coursebundler;
 
 import java.util.EnumMap;
 
+/**
+ * Represents a possible combination of courses that a student might take for an academic year.
+ * The course bundle has a fixed number of courses, defined in the constructor.
+ * It works in a similar manner to a stack. You can only push and pop courses into the bundle.
+ */
 public class Bundle {
-    // this class represents a set of courses that a student might take for an academic year or similar
-    // works like a stack. You can only push and pop courses
-
     private final int lenBundle;
     private Course[] bundle;
     private int count; // shows number of courses currently in the bundle
@@ -13,6 +15,11 @@ public class Bundle {
     private int numManagerial; // number of managerial courses
 
     // Constructor
+
+    /**
+     * Creates a bundle object with specified number of courses
+     * @param len number of courses in bundle
+     */
     public Bundle(int len){
         // initialize attributes
         this.lenBundle = len;
@@ -22,26 +29,47 @@ public class Bundle {
         this.numManagerial = 0;
     }
 
+    /**
+     * Returns an array of all the courses in the bundle
+     * @return array of course objects
+     */
     public Course[] getBundle(){
         return this.bundle;
     }
 
-    public Integer getNumPerTerm(Term term){
+    /**
+     * Returns number of courses currently in the bundle for specified term
+     * @param term academic term
+     * @return number of courses currently in the bundle for specified term
+     */
+    public Integer getNumForTerm(Term term){
         return this.numPerTerm.get(term);
     }
 
+    /**
+     * Returns number of managerial courses currently in the bundle
+     * @return number of managerial courses currently in the bundle
+     */
     public int getNumManagerial(){
         return this.numManagerial;
     }
 
+    /**
+     * Prints all the courses currently in the bundle to stdout
+     */
     public void printBundle(){
-        for (int i=0; i<this.lenBundle; i++){
+        if (this.count == 0) return;
+
+        for (int i=0; i<this.count; i++){
             this.bundle[i].printCourse();
         }
     }
 
+    /**
+     * Returns the codes of all the courses currently in the bundle
+     * @return codes of all the courses currently in the bundle. Returns null if no courses in the bundle
+     */
     public String[] getBundleCourseCodes(){
-        // returns the codes of courses currently in the bundle. returns null if no courses in the bundle
         if (this.count == 0) return null;
 
         String[] codes = new String[this.lenBundle];
@@ -53,13 +81,10 @@ public class Bundle {
         return codes;
     }
 
-    private void initializeNumPerTerm(){
-        this.numPerTerm = new EnumMap<Term, Integer>(Term.class);
-        for (Term term: Term.values()){
-            this.numPerTerm.put(term, 0);
-        }
-    }
-
+    /**
+     * Adds given course to the bundle, and updates other class attributes
+     * @param course academic course
+     */
     public void addCourse(Course course){
         // push course at end of the "stack"
 
@@ -69,6 +94,8 @@ public class Bundle {
             return;
         }
         this.bundle[count] = course;
+
+        // Update the rest of the class attributes
         Term term = course.getTerm();
         this.numPerTerm.put(term, this.numPerTerm.get(term)+1);
         if (course.getManagerial()){
@@ -77,10 +104,13 @@ public class Bundle {
         this.count++;
     }
 
+    /**
+     * Removes last course added to the bundle and updates class attributes
+     */
     public void removeLastCourse(){
         // remove last course in the "stack" (bundle)
         if (count == 0){
-            return;
+            return; // return if no courses in the bundle
         }
         this.count--;
         Term term = bundle[count].getTerm();
@@ -91,8 +121,19 @@ public class Bundle {
         this.bundle[count] = null;
     }
 
+    /**
+     * Checks if the bundle has filled
+     * @return true or false if the bundle is full
+     */
     public boolean isFull(){
         // returns if the bundle is full
         return count >= lenBundle;
+    }
+
+    private void initializeNumPerTerm(){
+        this.numPerTerm = new EnumMap<Term, Integer>(Term.class);
+        for (Term term: Term.values()){
+            this.numPerTerm.put(term, 0);
+        }
     }
 }
