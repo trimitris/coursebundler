@@ -4,6 +4,7 @@ import com.opencsv.CSVReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Arrays;
 
@@ -28,7 +29,7 @@ public class Data {
      * @param fileName name of CSV file (file should be in Data/ directory)
      * @throws FileNotFoundException if the fileName does not exist in Data/ directory
      */
-    public Data(String fileName) throws FileNotFoundException, RuntimeException{
+    public Data(String fileName) throws IOException, RuntimeException{
         String wd = System.getProperty("user.dir"); // root directory of project
         String pathTofilename = wd+ "/data/" + fileName;
         if (!checkFileExists(pathTofilename)) throw new FileNotFoundException("File " + fileName + " not found in Data/ directory");
@@ -37,7 +38,11 @@ public class Data {
         this.numCourses = 0;
         this.courses = new HashMap<String, Course>();
 
-        parseCSV(pathTofilename);
+        try {
+            parseCSV(pathTofilename);
+        } catch (Exception e) {
+            throw e;
+        }
 
         if (this.numCourses<1) throw new RuntimeException("No valid courses were found in the CSV file");
     }
@@ -47,15 +52,19 @@ public class Data {
         return f.exists() && !f.isDirectory();
     }
 
-    private void parseCSV(String file) {
+    private void parseCSV(String file) throws IOException {
         try {
             FileReader filereader = new FileReader(file);
             CSVReader csvReader = new CSVReader(filereader);
 
-            // read header of table in CSV file
+            // read and validate header of table in CSV file
             String[] header = csvReader.readNext();
             if (header == null) throw new RuntimeException("File at " + file + " is empty");
-            // TODO validate header has the right columns
+            if (header.length != 4) throw new RuntimeException("Header of table in CSV file does not have 4 fields");
+            String[] expectedHeader = {"Code", "Module", "Term", "Cw"};
+            for (int i=0; i<header.length; i++){
+                if (!header[i].equals(expectedHeader[i])) throw new RuntimeException("Header does not have proper format" + expectedHeader);
+            }
 
             // read data line by line
             String[] nextLine;
@@ -79,7 +88,7 @@ public class Data {
             Arrays.sort(this.courseCodes);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
     }
 

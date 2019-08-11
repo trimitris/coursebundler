@@ -1,6 +1,7 @@
 package coursebundler;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args){
@@ -11,7 +12,7 @@ public class Main {
             courses = new Data(fileName);
             courses.printAllCourses();
             System.out.println("");
-        } catch (FileNotFoundException | RuntimeException e) {
+        } catch (IOException | RuntimeException e) {
             e.printStackTrace();
             return;
         }
