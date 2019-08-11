@@ -23,7 +23,8 @@ public class Data {
 
     /**
      * Constructor accepts a fileName in CSV format. It processes the file and creates a data set in memory
-     * with the course information found in the file.
+     * with the course information found in the file. Any course entries in the CSV that have improper format
+     * are reported to stdout and are not parsed to the data set.
      * @param fileName name of CSV file (file should be in Data/ directory)
      * @throws FileNotFoundException if the fileName does not exist in Data/ directory
      */
@@ -36,7 +37,6 @@ public class Data {
         this.numCourses = 0;
         this.courses = new HashMap<String, Course>();
 
-        // read CSV file
         parseCSV(pathTofilename);
     }
 
@@ -82,10 +82,10 @@ public class Data {
     }
 
     private void parseLine(String[] line){
-        // the line array represents a course
+        // the line array argument represents a course in the CSV file
 
+        // Validate CSV entries and transform to proper representations for Term and Assessment
         Term term;
-        boolean managerial;
         try {
             term = parseTerm(line[2]);
         } catch (IllegalArgumentException e){
@@ -93,8 +93,20 @@ public class Data {
             printLineFromFile(line);
             return;
         }
+
+        Assessment assess;
+        try {
+            assess = parseAssessment(line[3]);
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            printLineFromFile(line);
+            return;
+        }
+
+        boolean managerial;
         managerial = parseManagerial(line[0]);
-        Course course = new Course(line[0], line[1], term, managerial);
+
+        Course course = new Course(line[0], line[1], term, managerial, assess);
 
         // check for duplicate course codes
         if (this.courses.containsKey(course.getCode())){
@@ -102,6 +114,7 @@ public class Data {
             course.printCourse();
             return;
         }
+        // add course
         this.courses.put(course.getCode(), course);
         this.numCourses++;
     }
@@ -143,65 +156,24 @@ public class Data {
      * @return if the course is only coursework
      * @throws IllegalArgumentException if the field is not one of the following: yes, no
      */
-    private boolean parseCw(String field) throws IllegalArgumentException{
+    private Assessment parseAssessment(String field) throws IllegalArgumentException{
         switch (field){
-            case "yes":
-                return true;
-            case "no":
-                return false;
+            case "ex":
+                return Assessment.ex;
+            case "cw":
+                return Assessment.cw;
+            case "both":
+                return Assessment.both;
             default:
-                throw new IllegalArgumentException("The field Cw for this course is invalid - it should be one of the following: yes, no");
+                throw new IllegalArgumentException("The field assessment for this course is invalid - it should be one of the following: ex, cw, both");
         }
     }
 
     private void printLineFromFile(String[] line){
         for (int i=0; i<line.length; i++){
-            System.out.print(line[i]);
+            System.out.print(line[i]+ ",");
         }
         System.out.println("");
-    }
-
-    private void generate(){
-        String[] codes = {"4e1", "4e4", "4e11", "4e12", "4f5","4f7", "4f8",
-            "4f10", "4f12", "4m12", "4m17", "4m21"};
-        String[] names = {
-            "Innovation and strategic management of intellectual property",
-            "management of technology",
-            "Strategic management",
-            "project management",
-            "advanced information theory and coding",
-            "statistical signal analysis",
-            "image processing and image coding",
-            "Deep learning and structured data",
-            "Computer vision",
-            "Pdes and variational methods",
-            "Practical optimization",
-            "Software engineering and design"};
-        Term[] term = {Term.M,Term.M,Term.L,Term.L,Term.L,Term.L,Term.L,Term.M,Term.M,Term.L,Term.M,Term.L};
-        Boolean[] managerial = {true, true, true, true, false, false, false,
-            false, false, false, false, false};
-
-        for (int i=0; i<12; i++){
-            Course course = new Course(codes[i], names[i], term[i], managerial[i]);
-
-            // check for duplicate course codes
-            if (this.courses.containsKey(course.getCode())){
-                System.out.println("The course shown right below has the same code with another course: ");
-                course.printCourse();
-                continue;
-            }
-            this.courses.put(course.getCode(), course);
-            this.numCourses++;
-        }
-
-        // Collect course codes for sorting
-        this.courseCodes = new String[this.numCourses];
-        int idx = 0;
-        for (String code: courses.keySet()){
-            this.courseCodes[idx] = code;
-            idx++;
-        }
-        Arrays.sort(this.courseCodes);
     }
 
     /**

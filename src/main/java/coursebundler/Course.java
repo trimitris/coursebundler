@@ -8,13 +8,14 @@ public class Course {
     private String name;
     private Term term;
     private Boolean managerial;
-    // TODO add another field for cw
+    private Assessment assess;
 
-    public Course(String code, String name, Term term, Boolean managerial){
+    public Course(String code, String name, Term term, Boolean managerial, Assessment assess){
         setCode(code);
         setName(name);
         setTerm(term);
         setManagerial(managerial);
+        setAssess(assess);
     }
 
     // Setter and getter methods
@@ -46,6 +47,9 @@ public class Course {
         return this.managerial;
     }
 
+    public void setAssess(Assessment assess){this.assess = assess;}
+    public Assessment getAssess(){ return this.assess;}
+
     /**
      * Prints the atttributes of the course class to stdout.
      */
@@ -61,4 +65,13 @@ enum Term {
     M, // Michaelmas
     L, // Lent
     E // Easter
+}
+
+/**
+ * Represents the type of assessment for a course
+ */
+enum Assessment {
+    ex, // exam
+    cw, // coursework
+    both // both exam and coursework
 }

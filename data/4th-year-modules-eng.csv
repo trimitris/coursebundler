@@ -1,13 +1,13 @@
 Code,Module,Term,Cw
-4e1 ,Innovation and strategic management of intellectual property ,M,yes
-4e4 ,management of technology,M,yes
-4e11 ,Strategic management,L,yes
-4e12 ,project management,L,yes
-4f5 ,advanced information theory and coding,L,no
-4f7 ,statistical signal analysis,L,no
-4f8 ,image processing and image coding,L,no
-4f10 ,Deep learning and structured data,M,no
-4f12 ,Computer vision,M,no
-4m12 ,Pdes and variational methods ,L,no
-4m17  ,Practical optimozation,M,yes 
-4m21 ,Software engineering and design,L,no
+4e1 ,Innovation and strategic management of intellectual property ,M,cw
+4e4 ,management of technology,M,cw
+4e11 ,Strategic management,L,cw
+4e12 ,project management,L,cw
+4f5 ,advanced information theory and coding,L,ex
+4f7 ,statistical signal analysis,L,ex
+4f8 ,image processing and image coding,L,ex
+4f10 ,Deep learning and structured data,M,ex
+4f12 ,Computer vision,M,ex
+4m12 ,Pdes and variational methods ,L,ex
+4m17  ,Practical optimozation ,M,cw
+4m21 ,Software engineering and design,L,ex
