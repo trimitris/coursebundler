@@ -1,11 +1,12 @@
 package coursebundler;
 
 import com.opencsv.CSVReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Arrays;
 
-// TODO read files from external file (e.g. CSV)
 
 /**
  * Retrieves and stores the data of all available courses for the academic year.
@@ -19,33 +20,145 @@ public class Data {
     private String[] courseCodes;
 
     // Constructor
-    public Data(){
+
+    /**
+     * Constructor accepts a fileName in CSV format. It processes the file and creates a data set in memory
+     * with the course information found in the file.
+     * @param fileName name of CSV file (file should be in Data/ directory)
+     * @throws FileNotFoundException if the fileName does not exist in Data/ directory
+     */
+    public Data(String fileName) throws FileNotFoundException{
+        String wd = System.getProperty("user.dir"); // root directory of project
+        String pathTofilename = wd+ "/data/" + fileName;
+        if (!checkFileExists(pathTofilename)) throw new FileNotFoundException("File " + fileName + " not found in Data/ directory");
+
+        // initialize attributes
         this.numCourses = 0;
         this.courses = new HashMap<String, Course>();
-        generate();
+
+        // read CSV file
+        parseCSV(pathTofilename);
     }
 
-    public static void readDataLineByLine(String file) {
+    private static boolean checkFileExists(String pathToFileName){
+        File f = new File(pathToFileName);
+        return f.exists() && !f.isDirectory();
+    }
+
+    private void parseCSV(String file) {
         try {
-            // Create an object of filereader
-            // class with CSV file as a parameter.
             FileReader filereader = new FileReader(file);
-
-            // create csvReader object passing
-            // file reader as a parameter
             CSVReader csvReader = new CSVReader(filereader);
-            String[] nextRecord;
 
-            // we are going to read data line by line
-            while ((nextRecord = csvReader.readNext()) != null) {
-                for (String cell : nextRecord) {
-                    System.out.print(cell + "\t");
+            // read header of table in CSV file
+            String[] header = csvReader.readNext();
+            if (header == null) throw new RuntimeException("File at " + file + " is empty");
+            // TODO validate header has the right columns
+
+            // read data line by line
+            String[] nextLine;
+            while ((nextLine = csvReader.readNext()) != null) {
+                // check line has 4 arguments
+                if (nextLine.length != 4){
+                    System.out.println("Following line in CSV does not have 4 fields are required");
+                    printLineFromFile(nextLine);
+                    continue;
                 }
-                System.out.println();
+                parseLine(nextLine);
             }
+
+            // Collect course codes for sorting
+            this.courseCodes = new String[this.numCourses];
+            int idx = 0;
+            for (String code: courses.keySet()){
+                this.courseCodes[idx] = code;
+                idx++;
+            }
+            Arrays.sort(this.courseCodes);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void parseLine(String[] line){
+        // the line array represents a course
+
+        Term term;
+        boolean managerial;
+        try {
+            term = parseTerm(line[2]);
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            printLineFromFile(line);
+            return;
+        }
+        managerial = parseManagerial(line[0]);
+        Course course = new Course(line[0], line[1], term, managerial);
+
+        // check for duplicate course codes
+        if (this.courses.containsKey(course.getCode())){
+            System.out.println("The course shown right below has the same code with another course, and so it was skipped: ");
+            course.printCourse();
+            return;
+        }
+        this.courses.put(course.getCode(), course);
+        this.numCourses++;
+    }
+
+    /**
+     * Parses the third column (term) of a line of the CSV from its String representaiton to the enum type Term
+     * @param field third column of a line of the CSV
+     * @return Term object equivalent of the field
+     * @throws IllegalStateException if the field is not one of the following: M, L, E
+     */
+    private Term parseTerm(String field) throws IllegalStateException{
+        switch (field){
+            case "M":
+                return Term.M;
+            case "L":
+                return Term.L;
+            case "E":
+                return Term.E;
+            default:
+                throw new IllegalArgumentException("The field term for this course is invalid - it should be one of the following: M,L,E");
+        }
+    }
+
+    private boolean parseManagerial(String field){
+        // assume if course code string has length less than 3, it is not a management course
+        if (field.length()>=3){
+            // check if course is of group E or is course with code 4I1
+            if ((field.toUpperCase().equals("4I1")) || (field.toUpperCase().charAt(1) == 'E')){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Parses the fourth column (cw) of a line of the CSV from its String representation to its boolean representation.
+     * True if the course is only coursework, and false if it is only exams.
+     * @param field fourth column of a line of the CSV
+     * @return if the course is only coursework
+     * @throws IllegalArgumentException if the field is not one of the following: yes, no
+     */
+    private boolean parseCw(String field) throws IllegalArgumentException{
+        switch (field){
+            case "yes":
+                return true;
+            case "no":
+                return false;
+            default:
+                throw new IllegalArgumentException("The field Cw for this course is invalid - it should be one of the following: yes, no");
+        }
+    }
+
+    private void printLineFromFile(String[] line){
+        for (int i=0; i<line.length; i++){
+            System.out.print(line[i]);
+        }
+        System.out.println("");
     }
 
     private void generate(){

@@ -1,13 +1,20 @@
 package coursebundler;
 
+import java.io.FileNotFoundException;
+
 public class Main {
     public static void main(String[] args){
         // Build a data object
-        Data courses = new Data();
+        String fileName = "4th-year-modules-eng.csv";
+        Data courses;
+        try {
+            courses = new Data(fileName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("File can't be parsed due to above exception, hence the program terminates");
+            return;
+        }
 
-        String wd = System.getProperty("user.dir");
-        System.out.println(wd);
-        Data.readDataLineByLine(wd+"/data/4th-year-modules-eng.csv");
 
         // Generate and print all course bundles that obey the rules
         BundleBuilder bundler = new BundleBuilder(courses, 8);

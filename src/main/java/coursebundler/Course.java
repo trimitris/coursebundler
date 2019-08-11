@@ -8,6 +8,7 @@ public class Course {
     private String name;
     private Term term;
     private Boolean managerial;
+    // TODO add another field for cw
 
     public Course(String code, String name, Term term, Boolean managerial){
         setCode(code);
