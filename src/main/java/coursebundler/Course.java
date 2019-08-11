@@ -54,7 +54,7 @@ public class Course {
      * Prints the atttributes of the course class to stdout.
      */
     public void printCourse(){
-        System.out.println("Code: " + getCode() + ", " + "Name: " + getName() + ", " + "Term: " + getTerm() + ", " + "Managerial: " + getManagerial());
+        System.out.println("Code: " + getCode() + ", " + "Name: " + getName() + ", " + "Term: " + getTerm() + ", " + "Managerial: " + getManagerial() + ", " + "Assessment: " + getAssess());
     }
 }
 

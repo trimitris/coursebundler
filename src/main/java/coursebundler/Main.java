@@ -9,9 +9,10 @@ public class Main {
         Data courses;
         try {
             courses = new Data(fileName);
-        } catch (FileNotFoundException e) {
+            courses.printAllCourses();
+            System.out.println("");
+        } catch (FileNotFoundException | RuntimeException e) {
             e.printStackTrace();
-            System.out.println("File can't be parsed due to above exception, hence the program terminates");
             return;
         }
 
@@ -21,6 +22,5 @@ public class Main {
         bundler.printBundles();
         System.out.println("Number of bundles: " + bundler.getBundles().size());
 
-//        courses.printAllCourses();
     }
 }

@@ -28,7 +28,7 @@ public class Data {
      * @param fileName name of CSV file (file should be in Data/ directory)
      * @throws FileNotFoundException if the fileName does not exist in Data/ directory
      */
-    public Data(String fileName) throws FileNotFoundException{
+    public Data(String fileName) throws FileNotFoundException, RuntimeException{
         String wd = System.getProperty("user.dir"); // root directory of project
         String pathTofilename = wd+ "/data/" + fileName;
         if (!checkFileExists(pathTofilename)) throw new FileNotFoundException("File " + fileName + " not found in Data/ directory");
@@ -38,6 +38,8 @@ public class Data {
         this.courses = new HashMap<String, Course>();
 
         parseCSV(pathTofilename);
+
+        if (this.numCourses<1) throw new RuntimeException("No valid courses were found in the CSV file");
     }
 
     private static boolean checkFileExists(String pathToFileName){
@@ -60,7 +62,7 @@ public class Data {
             while ((nextLine = csvReader.readNext()) != null) {
                 // check line has 4 arguments
                 if (nextLine.length != 4){
-                    System.out.println("Following line in CSV does not have 4 fields are required");
+                    System.out.println("Following line in CSV does not have 4 fields as required");
                     printLineFromFile(nextLine);
                     continue;
                 }
@@ -170,10 +172,11 @@ public class Data {
     }
 
     private void printLineFromFile(String[] line){
-        for (int i=0; i<line.length; i++){
+        for (int i=0; i<line.length-1; i++){
             System.out.print(line[i]+ ",");
         }
-        System.out.println("");
+        System.out.print(line[line.length-1]);
+        System.out.println("\n");
     }
 
     /**
