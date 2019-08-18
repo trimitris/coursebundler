@@ -1,8 +1,9 @@
-package coursebundler;
+package coursebundler.engine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import coursebundler.utilities.Color;
 
 /**
  * Builds all possible combinations of courses (bundles) that follow the rules.
@@ -137,6 +138,39 @@ public class BundleBuilder {
         for (int i=0; i<bundleIds.size(); i++){
             printBundleAndId(bundleIds.get(i));
         }
+    }
+
+    /**
+     * Prints the courses of a bundle in color, to show which courses are the same and which are different with another
+     * bundle
+     * @param bundleId Id of bundle being printed
+     * @param differFromId Id of bundle against which the first bundle is compared
+     */
+    public void printBundleDifferencesColor(Integer bundleId, Integer differFromId){
+        if ((bundleId >= this.bundles.size()) || bundleId < 0){
+            throw new ArrayIndexOutOfBoundsException("The bundle id " + bundleId + " does not exist");
+        }
+        if ((differFromId >= this.bundles.size()) || differFromId < 0){
+            throw new ArrayIndexOutOfBoundsException("The bundle id " + differFromId + " does not exist");
+        }
+
+        // build HashSet with courses of targetBundle
+        HashSet<String> targetCourses = new HashSet<String>();
+        for (int i=0; i<this.lenBundle; i++){
+            targetCourses.add(this.bundles.get(differFromId)[i]);
+        }
+
+        // print Bundle
+        System.out.print("Id: " + bundleId + " Bundle: ");
+        for (int i=0; i<this.lenBundle; i++){
+            if (targetCourses.contains(this.bundles.get(bundleId)[i])){
+                System.out.print(Color.applyGreen(this.bundles.get(bundleId)[i]));
+            } else {
+                System.out.print(Color.applyRed(this.bundles.get(bundleId)[i]));
+            }
+            System.out.print(" ");
+        }
+        System.out.println();
     }
 
     private void findBundles(){

@@ -1,4 +1,4 @@
-package coursebundler;
+package coursebundler.engine;
 
 import java.util.EnumMap;
 

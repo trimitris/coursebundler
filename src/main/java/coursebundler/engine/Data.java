@@ -1,4 +1,4 @@
-package coursebundler;
+package coursebundler.engine;
 
 import com.opencsv.CSVReader;
 import java.io.File;

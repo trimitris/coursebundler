@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import coursebundler.engine.BundleBuilder;
+import coursebundler.engine.Data;
+import coursebundler.utilities.*;
+
 public class Main {
     public static void main(String[] args){
         // Build a data object
@@ -24,12 +28,17 @@ public class Main {
         BundleBuilder bundler = new BundleBuilder(courses, 8);
         bundler.printAllBundles();
         System.out.println("Number of bundles: " + bundler.getBundles().size());
+        Integer targetBundle = 0;
         System.out.println("Target bundle: ");
-        System.out.println(Arrays.toString(bundler.getBundles().get(0)));
+        System.out.println(Arrays.toString(bundler.getBundles().get(targetBundle)));
 
         System.out.println("Similar bundles (by id)");
-        ArrayList<Integer> similarList = bundler.findSimilarBundlesTo(0,1);
+        ArrayList<Integer> similarList = bundler.findSimilarBundlesTo(targetBundle,1);
         System.out.println(Arrays.toString(similarList.toArray()));
 //        bundler.printBundlesFromBundleIds(similarList);
+
+        for (int i=0; i<bundler.getBundles().size(); i++){
+            bundler.printBundleDifferencesColor(i, targetBundle);
+        }
     }
 }

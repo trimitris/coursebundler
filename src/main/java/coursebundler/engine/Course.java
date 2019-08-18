@@ -1,4 +1,4 @@
-package coursebundler;
+package coursebundler.engine;
 
 /**
  * Represents an academic course that can take place over a single term.
