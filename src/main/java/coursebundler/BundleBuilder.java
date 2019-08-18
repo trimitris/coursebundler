@@ -2,6 +2,7 @@ package coursebundler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Builds all possible combinations of courses (bundles) that follow the rules.
@@ -53,10 +54,56 @@ public class BundleBuilder {
     /**
      * Prints all possible combination of courses that follow the rules
      */
-    public void printBundles(){
+    public void printAllBundles(){
         // prints course codes in each bundle
         for (int i=0; i<this.bundles.size(); i++){
             System.out.println(Arrays.toString(this.bundles.get(i)));
+        }
+    }
+
+    /**
+     * Returns all the valid bundles that differ from the target bundle up to a certain number of courses.
+     * @param targetBundleID The index of the target bundle in the ArrayList this.bundles
+     * @param upToDiff Max number of courses the returned bundles differ from the target bundle
+     * @return a list of valid bundles that differ from the target bundle up to a certain number of courses
+     */
+    public ArrayList<String[]> findSimilarBundlesTo(int targetBundleID, int upToDiff){
+        if ((targetBundleID >= this.bundles.size()) || targetBundleID < 0){
+            throw new ArrayIndexOutOfBoundsException("The targetBundleID " + targetBundleID + " does not exist");
+        }
+        if ((upToDiff > this.lenBundle) || (upToDiff < 0)){
+            throw new IllegalArgumentException("Difference argument must be between 0 and " + this.lenBundle);
+        }
+
+        // assuming the BundleBuilder.findBundles has already been ran once, then this.bundles is populated with bundles!
+
+        // build HashSet with courses of targetBundle
+        HashSet<String> targetCourses = new HashSet<String>();
+        for (int i=0; i<this.lenBundle; i++){
+            targetCourses.add(this.bundles.get(targetBundleID)[i]);
+        }
+
+        ArrayList<String[]> similarBundles = new ArrayList<String[]>();
+        for (int i=0; i<this.bundles.size(); i++){
+            if (i == targetBundleID) continue; // don't consider target bundle to the list of similar bundles
+            int diffCount = 0;
+            for (int j=0; j<this.lenBundle; j++){
+                if (!targetCourses.contains(this.bundles.get(i)[j])) diffCount++;
+            }
+            if (diffCount <= upToDiff){
+                similarBundles.add(this.bundles.get(i));
+            }
+        }
+        return similarBundles;
+    }
+
+    /**
+     * Prints the given list of bundles to stdout
+     * @param list ArrayList of String arrays, which represent the course codes of the courses in each bundle
+     */
+    public static void printBundleList(ArrayList<String[]> list){
+        for (int i=0; i<list.size(); i++){
+            System.out.println(Arrays.toString(list.get(i)));
         }
     }
 

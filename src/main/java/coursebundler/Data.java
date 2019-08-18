@@ -29,7 +29,7 @@ public class Data {
      * @param fileName name of CSV file (file should be in Data/ directory)
      * @throws FileNotFoundException if the fileName does not exist in Data/ directory
      */
-    public Data(String fileName) throws IOException, RuntimeException{
+    public Data(String fileName) throws IOException, RuntimeException {
         String wd = System.getProperty("user.dir"); // root directory of project
         String pathTofilename = wd+ "/data/" + fileName;
         if (!checkFileExists(pathTofilename)) throw new FileNotFoundException("File " + fileName + " not found in Data/ directory");
