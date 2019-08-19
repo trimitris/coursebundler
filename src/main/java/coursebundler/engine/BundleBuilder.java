@@ -227,23 +227,13 @@ public class BundleBuilder {
             throw new ArrayIndexOutOfBoundsException("The bundle id " + differFromId + " does not exist");
         }
 
-        // build HashSet with courses of targetBundle
-        HashSet<String> targetCourses = new HashSet<>();
+        // Build ArrayList of the courses of bundle with differFromId
+        ArrayList<String> courseCodes = new ArrayList<>();
         for (int i=0; i<this.lenBundle; i++){
-            targetCourses.add(this.bundles.get(differFromId)[i]);
+            courseCodes.add(this.bundles.get(differFromId)[i]);
         }
 
-        // print Bundle
-        System.out.print("Id: " + bundleId + " Bundle: ");
-        for (int i=0; i<this.lenBundle; i++){
-            if (targetCourses.contains(this.bundles.get(bundleId)[i])){
-                System.out.print(Color.applyGreen(this.bundles.get(bundleId)[i]));
-            } else {
-                System.out.print(Color.applyRed(this.bundles.get(bundleId)[i]));
-            }
-            System.out.print(" ");
-        }
-        System.out.println();
+        printBundleHilghlightCourses(bundleId, courseCodes);
     }
 
     /**
