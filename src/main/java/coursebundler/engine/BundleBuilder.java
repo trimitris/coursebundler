@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import coursebundler.utilities.Color;
 
+// TODO create method for printing all the bundles and highlighting the desired course codes
+
 /**
  * Builds all possible combinations of courses (bundles) that follow the rules.
  * Examples of rules are: number of courses per term, number of management courses per academic year.
@@ -30,153 +32,11 @@ public class BundleBuilder {
         findBundles();
     }
 
-    // Setter and getter methods
-    private void setCourses(Data courses){
-        this.courses = courses;
-    }
-    public Data getCourses(){
-        return this.courses;
-    }
-
-    /**
-     * Returns list of bundles (in this context, bundles contain course codes and not course objects)
-     * @return list of bundles
-     */
-    public ArrayList<String[]> getBundles(){
-        return this.bundles;
-    }
-
-    public int getLenBundle(){
-        return this.lenBundle;
-    }
-
-    // Interface methods
-
-    /**
-     * Prints all possible combination of courses that follow the rules
-     */
-    public void printAllBundles(){
-        // prints course codes in each bundle
-        for (int i=0; i<this.bundles.size(); i++){
-            printBundleAndId(i);
-        }
-    }
-
-    /**
-     * Prints a bundle to stdout, given a particular bundle id
-     * @param bundleId The id of the required bundle
-     */
-    public void printBundleById(Integer bundleId){
-        if ((bundleId >= this.bundles.size()) || bundleId < 0){
-            throw new ArrayIndexOutOfBoundsException("The bundleID " + bundleId + " does not exist");
-        }
-        System.out.println(Arrays.toString(this.bundles.get(bundleId)));
-    }
-
-    /**
-     * Prints the id of the bundle and the bundle to stdout, given the bundle id
-     * @param bundleId The id of the required bundle
-     */
-    public void printBundleAndId(Integer bundleId){
-        if ((bundleId >= this.bundles.size()) || bundleId < 0){
-            throw new ArrayIndexOutOfBoundsException("The bundleID " + bundleId + " does not exist");
-        }
-        System.out.println("Id: " + bundleId + " Bundle: " + Arrays.toString(this.bundles.get(bundleId)));
-    }
-
-    /**
-     * Returns all the valid bundles that differ from the target bundle up to a certain number of courses.
-     * @param targetBundleID The index of the target bundle in the ArrayList this.bundles
-     * @param upToDiff Max number of courses the returned bundles differ from the target bundle
-     * @return a list of valid bundle Ids that differ from the target bundle up to a certain number of courses
-     */
-    public ArrayList<Integer> findSimilarBundlesTo(int targetBundleID, int upToDiff){
-        if ((targetBundleID >= this.bundles.size()) || targetBundleID < 0){
-            throw new ArrayIndexOutOfBoundsException("The targetBundleID " + targetBundleID + " does not exist");
-        }
-        if ((upToDiff > this.lenBundle) || (upToDiff < 0)){
-            throw new IllegalArgumentException("Difference argument must be between 0 and " + this.lenBundle);
-        }
-
-        // assuming the BundleBuilder.findBundles has already been ran once, then this.bundles is populated with bundles!
-
-        // build HashSet with courses of targetBundle
-        HashSet<String> targetCourses = new HashSet<String>();
-        for (int i=0; i<this.lenBundle; i++){
-            targetCourses.add(this.bundles.get(targetBundleID)[i]);
-        }
-
-        ArrayList<Integer> similarBundleIds = new ArrayList<Integer>();
-        for (int i=0; i<this.bundles.size(); i++){
-            if (i == targetBundleID) continue; // don't consider target bundle to the list of similar bundles
-            int diffCount = 0;
-            for (int j=0; j<this.lenBundle; j++){
-                if (!targetCourses.contains(this.bundles.get(i)[j])) diffCount++;
-            }
-            if (diffCount <= upToDiff){
-                similarBundleIds.add(new Integer(i));
-            }
-        }
-        return similarBundleIds;
-    }
-
-    /**
-     * Prints the given list of bundles to stdout
-     * @param list ArrayList of String arrays, which represent the course codes of the courses in each bundle
-     */
-    public static void printCustomBundleList(ArrayList<String[]> list){
-        for (int i=0; i<list.size(); i++){
-            System.out.println(Arrays.toString(list.get(i)));
-        }
-    }
-
-    /**
-     * Prints the bundles with the given bundle Ids to stdout
-     * @param bundleIds List of bundle ids (i.e. the indexes of the bundles in this.bundles)
-     */
-    public void printBundlesFromBundleIds(ArrayList<Integer> bundleIds){
-        for (int i=0; i<bundleIds.size(); i++){
-            printBundleAndId(bundleIds.get(i));
-        }
-    }
-
-    /**
-     * Prints the courses of a bundle in color, to show which courses are the same and which are different with another
-     * bundle
-     * @param bundleId Id of bundle being printed
-     * @param differFromId Id of bundle against which the first bundle is compared
-     */
-    public void printBundleDifferencesColor(Integer bundleId, Integer differFromId){
-        if ((bundleId >= this.bundles.size()) || bundleId < 0){
-            throw new ArrayIndexOutOfBoundsException("The bundle id " + bundleId + " does not exist");
-        }
-        if ((differFromId >= this.bundles.size()) || differFromId < 0){
-            throw new ArrayIndexOutOfBoundsException("The bundle id " + differFromId + " does not exist");
-        }
-
-        // build HashSet with courses of targetBundle
-        HashSet<String> targetCourses = new HashSet<String>();
-        for (int i=0; i<this.lenBundle; i++){
-            targetCourses.add(this.bundles.get(differFromId)[i]);
-        }
-
-        // print Bundle
-        System.out.print("Id: " + bundleId + " Bundle: ");
-        for (int i=0; i<this.lenBundle; i++){
-            if (targetCourses.contains(this.bundles.get(bundleId)[i])){
-                System.out.print(Color.applyGreen(this.bundles.get(bundleId)[i]));
-            } else {
-                System.out.print(Color.applyRed(this.bundles.get(bundleId)[i]));
-            }
-            System.out.print(" ");
-        }
-        System.out.println();
-    }
 
     private void findBundles(){
-        // interface method - starts the recursive call
+        // method that starts the recursive call
 
-        this.bundles = new ArrayList<String[]>();
+        this.bundles = new ArrayList<>();
         findBundles(0, new Bundle(this.lenBundle));
     }
 
@@ -214,6 +74,186 @@ public class BundleBuilder {
                 findBundles(i+1, curBundle);
                 curBundle.removeLastCourse();
             }
+        }
+    }
+
+    private void setCourses(Data courses){
+        this.courses = courses;
+    }
+
+    // Public methods
+
+    /**
+     * Returns all the valid bundles that differ from the target bundle up to a certain number of courses.
+     * @param targetBundleID The index of the target bundle in the ArrayList this.bundles
+     * @param upToDiff Max number of courses the returned bundles differ from the target bundle
+     * @return a list of valid bundle Ids that differ from the target bundle up to a certain number of courses
+     */
+    public ArrayList<Integer> findSimilarBundlesTo(int targetBundleID, int upToDiff){
+        if ((targetBundleID >= this.bundles.size()) || targetBundleID < 0){
+            throw new ArrayIndexOutOfBoundsException("The targetBundleID " + targetBundleID + " does not exist");
+        }
+        if ((upToDiff > this.lenBundle) || (upToDiff < 0)){
+            throw new IllegalArgumentException("Difference argument must be between 0 and " + this.lenBundle);
+        }
+
+        // assuming the BundleBuilder.findBundles has already been ran once, then this.bundles is populated with bundles!
+
+        // build HashSet with courses of targetBundle
+        HashSet<String> targetCourses = new HashSet<>();
+        for (int i=0; i<this.lenBundle; i++){
+            targetCourses.add(this.bundles.get(targetBundleID)[i]);
+        }
+
+        ArrayList<Integer> similarBundleIds = new ArrayList<>();
+        for (int i=0; i<this.bundles.size(); i++){
+            if (i == targetBundleID) continue; // don't consider target bundle to the list of similar bundles
+            int diffCount = 0;
+            for (int j=0; j<this.lenBundle; j++){
+                if (!targetCourses.contains(this.bundles.get(i)[j])) diffCount++;
+            }
+            if (diffCount <= upToDiff){
+                similarBundleIds.add(new Integer(i));
+            }
+        }
+        return similarBundleIds;
+    }
+
+    /**
+     * Returns all valid bundles that contain all the required courses
+     * @param requiredCourseCodes A list of course codes for the required courses
+     * @return A list of bundleIds of the valid bundles that contain all the required courses
+     */
+    public ArrayList<Integer> findBundlesWithCourses(ArrayList<String> requiredCourseCodes){
+        // check validity of input
+        if (requiredCourseCodes.size() > this.lenBundle) throw new IllegalArgumentException("Number of required courses must not exceed number of courses in a bundle");
+        // check if all given course codes exist
+        for (int i=0; i<requiredCourseCodes.size(); i++){
+            // TODO create a custom exception for the situation of non-existent course code
+            if (this.courses.getCourseByCode(requiredCourseCodes.get(i)) == null) throw new IllegalArgumentException("The course code: " + requiredCourseCodes.get(i) + " does not exist");
+        }
+
+        ArrayList<Integer> outputIds = new ArrayList<>();
+        // Loop over all valid bundles and find the ones that have all the requiredCourseCodes
+        for (int i=0; i<this.bundles.size(); i++){
+            // create hashSet with the courses in the current bundle for easily checking if the required ones are in it
+            HashSet<String> curBundleCourses = new HashSet<>();
+            for (int j=0; j<this.lenBundle; j++){
+                curBundleCourses.add(this.bundles.get(i)[j]);
+            }
+
+            // check if all requiredCourseCodes are in it
+            boolean isValidBundle = true;
+            for (int j=0; j<requiredCourseCodes.size(); j++){
+                if (!curBundleCourses.contains(requiredCourseCodes.get(j))){
+                    isValidBundle = false;
+                    break;
+                }
+            }
+            // if bundle is valid, add its id
+            if (isValidBundle) outputIds.add(i);
+        }
+        return outputIds;
+    }
+
+    public Data getCourses(){
+        return this.courses;
+    }
+
+    /**
+     * Returns list of bundles (in this context, bundles contain course codes and not course objects)
+     * @return list of bundles
+     */
+    public ArrayList<String[]> getBundles(){
+        return this.bundles;
+    }
+
+    public int getLenBundle(){ return this.lenBundle; }
+
+
+    /**
+     * Prints all possible combination of courses that follow the rules
+     */
+    public void printAllBundles(){
+        // prints course codes in each bundle
+        for (int i=0; i<this.bundles.size(); i++){
+            printBundleAndId(i);
+        }
+    }
+
+    /**
+     * Prints a bundle to stdout, given a particular bundle id
+     * @param bundleId The id of the required bundle
+     */
+    public void printBundleById(Integer bundleId){
+        if ((bundleId >= this.bundles.size()) || bundleId < 0){
+            throw new ArrayIndexOutOfBoundsException("The bundleID " + bundleId + " does not exist");
+        }
+        System.out.println(Arrays.toString(this.bundles.get(bundleId)));
+    }
+
+    /**
+     * Prints the id of the bundle and the bundle to stdout, given the bundle id
+     * @param bundleId The id of the required bundle
+     */
+    public void printBundleAndId(Integer bundleId){
+        if ((bundleId >= this.bundles.size()) || bundleId < 0){
+            throw new ArrayIndexOutOfBoundsException("The bundleID " + bundleId + " does not exist");
+        }
+        System.out.println("Id: " + bundleId + " Bundle: " + Arrays.toString(this.bundles.get(bundleId)));
+    }
+
+    /**
+     * Prints the bundles with the given bundle Ids to stdout
+     * @param bundleIds List of bundle ids (i.e. the indexes of the bundles in this.bundles)
+     */
+    public void printBundlesFromBundleIds(ArrayList<Integer> bundleIds){
+        for (int i=0; i<bundleIds.size(); i++){
+            printBundleAndId(bundleIds.get(i));
+        }
+    }
+
+    /**
+     * Prints the courses of a bundle in color, to show which courses are the same and which are different with another
+     * bundle
+     * @param bundleId Id of bundle being printed
+     * @param differFromId Id of bundle against which the first bundle is compared
+     */
+    public void printBundleDifferencesColor(Integer bundleId, Integer differFromId){
+        if ((bundleId >= this.bundles.size()) || bundleId < 0){
+            throw new ArrayIndexOutOfBoundsException("The bundle id " + bundleId + " does not exist");
+        }
+        if ((differFromId >= this.bundles.size()) || differFromId < 0){
+            throw new ArrayIndexOutOfBoundsException("The bundle id " + differFromId + " does not exist");
+        }
+
+        // build HashSet with courses of targetBundle
+        HashSet<String> targetCourses = new HashSet<>();
+        for (int i=0; i<this.lenBundle; i++){
+            targetCourses.add(this.bundles.get(differFromId)[i]);
+        }
+
+        // print Bundle
+        System.out.print("Id: " + bundleId + " Bundle: ");
+        for (int i=0; i<this.lenBundle; i++){
+            if (targetCourses.contains(this.bundles.get(bundleId)[i])){
+                System.out.print(Color.applyGreen(this.bundles.get(bundleId)[i]));
+            } else {
+                System.out.print(Color.applyRed(this.bundles.get(bundleId)[i]));
+            }
+            System.out.print(" ");
+        }
+        System.out.println();
+    }
+
+    // Static methods
+    /**
+     * Prints the given list of bundles to stdout
+     * @param list ArrayList of String arrays, which represent the course codes of the courses in each bundle
+     */
+    public static void printCustomBundleList(ArrayList<String[]> list){
+        for (int i=0; i<list.size(); i++){
+            System.out.println(Arrays.toString(list.get(i)));
         }
     }
 }

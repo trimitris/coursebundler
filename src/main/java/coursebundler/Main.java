@@ -6,11 +6,11 @@ import java.util.Arrays;
 
 import coursebundler.engine.BundleBuilder;
 import coursebundler.engine.Data;
-import coursebundler.utilities.*;
 
 public class Main {
     public static void main(String[] args){
         // Build a data object
+
         String fileName = "4th-year-modules-eng.csv";
 //        String fileName = "sample.csv";
         Data courses;
@@ -25,20 +25,31 @@ public class Main {
 
 
         // Generate and print all course bundles that obey the rules
+
         BundleBuilder bundler = new BundleBuilder(courses, 8);
-        bundler.printAllBundles();
+//        bundler.printAllBundles();
         System.out.println("Number of bundles: " + bundler.getBundles().size());
+
+        // find bundles similar to a target bundle
         Integer targetBundle = 0;
         System.out.println("Target bundle: ");
         System.out.println(Arrays.toString(bundler.getBundles().get(targetBundle)));
-
         System.out.println("Similar bundles (by id)");
         ArrayList<Integer> similarList = bundler.findSimilarBundlesTo(targetBundle,1);
         System.out.println(Arrays.toString(similarList.toArray()));
-//        bundler.printBundlesFromBundleIds(similarList);
-
         for (int i=0; i<bundler.getBundles().size(); i++){
             bundler.printBundleDifferencesColor(i, targetBundle);
         }
+
+        // find bundles that contain certain courses
+        ArrayList<String> requiredCodes = new ArrayList<>();
+        requiredCodes.add("4e1 ");
+        requiredCodes.add("4m12 ");
+        // TODO test the below function
+        ArrayList<Integer> requestedBundles = bundler.findBundlesWithCourses(requiredCodes);
+        bundler.printBundlesFromBundleIds(requestedBundles);
+        courses.getCourseByCode("4e1 ").printCourse();
+//        System.out.println(courses.getNumCourses());
+//        System.out.println(courses.getCourseByIdx(0).getCode()+"|");
     }
 }
