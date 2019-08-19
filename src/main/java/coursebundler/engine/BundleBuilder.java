@@ -215,11 +215,11 @@ public class BundleBuilder {
 
     /**
      * Prints the courses of a bundle in color, to show which courses are the same and which are different with another
-     * bundle
+     * bundle. Same courses are green, different courses are red.
      * @param bundleId Id of bundle being printed
      * @param differFromId Id of bundle against which the first bundle is compared
      */
-    public void printBundleDifferencesColor(Integer bundleId, Integer differFromId){
+    public void printBundleHighlightDifferences(Integer bundleId, Integer differFromId){
         if ((bundleId >= this.bundles.size()) || bundleId < 0){
             throw new ArrayIndexOutOfBoundsException("The bundle id " + bundleId + " does not exist");
         }
@@ -231,6 +231,40 @@ public class BundleBuilder {
         HashSet<String> targetCourses = new HashSet<>();
         for (int i=0; i<this.lenBundle; i++){
             targetCourses.add(this.bundles.get(differFromId)[i]);
+        }
+
+        // print Bundle
+        System.out.print("Id: " + bundleId + " Bundle: ");
+        for (int i=0; i<this.lenBundle; i++){
+            if (targetCourses.contains(this.bundles.get(bundleId)[i])){
+                System.out.print(Color.applyGreen(this.bundles.get(bundleId)[i]));
+            } else {
+                System.out.print(Color.applyRed(this.bundles.get(bundleId)[i]));
+            }
+            System.out.print(" ");
+        }
+        System.out.println();
+    }
+
+    /**
+     * Prints the given bundle to stdout, and colors in green any courses of the bundle contained in the courseCodes.
+     * It colors in red anything not in the courseCodes.
+     * @param bundleId Id of bundle being printed
+     * @param courseCodes List of course codes that are going to be printed in green
+     */
+    public void printBundleHilghlightCourses(Integer bundleId, ArrayList<String> courseCodes){
+        if ((bundleId >= this.bundles.size()) || bundleId < 0){
+            throw new ArrayIndexOutOfBoundsException("The bundle id " + bundleId + " does not exist");
+        }
+        for (int i=0; i<courseCodes.size(); i++){
+            // TODO create a custom exception for the situation of non-existent course code
+            if (this.courses.getCourseByCode(courseCodes.get(i)) == null) throw new IllegalArgumentException("The course code: " + courseCodes.get(i) + " does not exist");
+        }
+
+        // build HashSet with courseCodes
+        HashSet<String> targetCourses = new HashSet<>();
+        for (int i=0; i<courseCodes.size(); i++){
+            targetCourses.add(courseCodes.get(i));
         }
 
         // print Bundle
