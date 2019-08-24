@@ -181,6 +181,18 @@ public class BundleBuilder {
         }
     }
 
+    public void printAllBundlesVerbose(){
+        for (int i=0; i<this.bundles.size(); i++){
+            System.out.println("Printing bundle with bundleId: " + i);
+            String[] bundleCodes = this.bundles.get(i);
+            for (int j=0; j<this.lenBundle; j++){
+                this.courses.getCourseByCode(bundleCodes[j]).printCourse();
+            }
+            System.out.println();
+        }
+    }
+
+
     /**
      * Prints a bundle to stdout, given a particular bundle id
      * @param bundleId The id of the required bundle
