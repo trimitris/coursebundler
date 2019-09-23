@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Coursebundler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <input type="button" onclick="RequestBundles()" value="Get Bundles" />
+    <br><br>
+    <div id="containerBundles"; class="container"></div>
+
+</body>
+
+<script>
+    function RequestBundles() {
+        $.ajax({
+        type: "GET",
+        url: "/get-bundles",
+        success: function (data) {
+            console.log("AJAX call requesting the json containing the bundles was successful!");
+            bundles_json = JSON.stringify(data);
+            console.log(bundles_json);
+            DisplayBundles(JSON.parse(bundles_json));
+        },
+        error: function (e) {
+            console.log("AJAX call requesting the json containing the bundles faliked!");
+        }
+    });
+    }
+
+    function RequestBundles2() {
+        var bundles_string = `{
+            "coursesList": [
+                {"code": "4e1", "name": "Management1"},
+                {"code": "4e4", "name": "Management2"},
+                {"code": "4f7", "name": "Info1"},
+                {"code": "4f13", "name": "Info2"},
+                {"code": "4f35", "name": "Info3"},
+                {"code": "4f3", "name": "Info4"}
+            ],
+            "bundles": [
+                {"id": 1, "courses": ["4e1", "4e4", "4f7"]},
+                {"id": 2, "courses": ["4e1", "4e4", "4f13"]},
+                {"id": 3, "courses": ["4e1", "4e4", "4f35"]},
+                {"id": 4, "courses": ["4e1", "4e4", "4f3"]},
+                {"id": 5, "courses": ["4f7", "4f3", "4e4"]}
+            ]
+        }`
+
+        var data = JSON.parse(bundles_string);
+
+        DisplayBundles(data);
+    }
+
+    function DisplayBundles(data) {
+
+        // create coursesDict
+        var coursesDict = {};
+        for (var i = 0; i < data.coursesList.length; i++) {
+            var code = data.coursesList[i].code;
+            if (!(code in coursesDict)){
+                coursesDict[code] = {"name": data.coursesList[i].name, "term": data.coursesList[i].term,
+                "managerial": data.coursesList[i].managerial, "assess": data.coursesList[i].assess};
+            }
+        }
+
+        // Check if any courses were found
+        if (Object.keys(coursesDict).length <= 0){
+            alert("No courses found in coursesList of JSON file");
+            return;
+        }
+        console.log(coursesDict); //TODO remove
+
+
+        // Create table template for all bundles
+        var tableTempl = document.createElement("table");
+        tableTempl.setAttribute("class", "table table-striped");
+        tableTempl.setAttribute("border", "1");
+
+        // Get names for table header
+        var col = [];
+        for (var key in data.coursesList[0]){
+            if (col.indexOf(key) === -1) {
+                col.push(key);
+            }
+        }
+
+        // Add table header to template
+        var thead = tableTempl.createTHead();
+        thead.setAttribute("class", "thead-dark");
+        var tr = document.createElement("tr");
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");
+            th.setAttribute("scope", "col")
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+        thead.appendChild(tr);
+
+        var divContainer = document.getElementById("containerBundles");
+        divContainer.innerHTML = "";
+
+        // Create and display table for each bundle
+        for (var i = 0; i < data.bundles.length; i++){
+            // copy html node template
+            table = tableTempl.cloneNode(true);
+            tbody = document.createElement('tbody');
+
+            // Fill table with courses in current bundle
+            var bundleId = data.bundles[i].id;
+            var bundleCourses = data.bundles[i].courses;
+            for (var j = 0; j< bundleCourses.length; j++){
+                tr = tbody.insertRow();
+                var code = bundleCourses[j];
+
+                // fill table
+                tr.insertCell().innerHTML = code;
+                tr.insertCell().innerHTML = coursesDict[code].name;
+                tr.insertCell().innerHTML = coursesDict[code].term;
+                tr.insertCell().innerHTML = coursesDict[code].managerial;
+                tr.insertCell().innerHTML = coursesDict[code].assess;
+            }
+            table.appendChild(tbody);
+
+            // Add table id
+            table.setAttribute("id", "bundle" + bundleId);
+
+            // Add filled table for current bundle to html
+            divContainer.appendChild(table);
+            divContainer.appendChild(document.createElement("br"));
+        }
+    }
+</script>
+</html>

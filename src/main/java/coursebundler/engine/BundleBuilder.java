@@ -12,7 +12,7 @@ import coursebundler.utilities.Color;
  * Examples of rules are: number of courses per term, number of management courses per academic year.
  */
 public class BundleBuilder {
-    private Data courses;
+    private SelectedData courses;
     private ArrayList<String[]> bundles; // list of bundles represented only by the course codes of its members, and NOT bundle objects
     private final int lenBundle;
 
@@ -20,10 +20,10 @@ public class BundleBuilder {
 
     /**
      * Creates a BundleBuilder object
-     * @param courses instance of Data class, represents available courses for academic year
+     * @param courses instance of SelectedData class, represents available courses for academic year
      * @param lenBundle is the permitted number of courses in a course combination
      */
-    public BundleBuilder(Data courses, int lenBundle) {
+    public BundleBuilder(SelectedData courses, int lenBundle) {
         if (lenBundle < 1) throw new IllegalArgumentException("Length of bundle shouldn't be less than 1");
         if (courses == null) throw new NullPointerException("courses data cannot be null");
 
@@ -77,7 +77,7 @@ public class BundleBuilder {
         }
     }
 
-    private void setCourses(Data courses){
+    private void setCourses(SelectedData courses){
         this.courses = courses;
     }
 
@@ -156,7 +156,7 @@ public class BundleBuilder {
         return outputIds;
     }
 
-    public Data getCourses(){
+    public SelectedData getCourses(){
         return this.courses;
     }
 

@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Select courses</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+
+    <body>
+        <h1>Select at least 8 courses from the ones below</h1>
+
+        <form class="ui form" th:action="@{/select-courses}" method="post" th:object="${selected_courses}">
+            <ul>
+                <li th:each="code : ${course_codes}">
+                    <div class="ui checkbox">
+                        <input type="checkbox" th:field="*{selectedCourses}" th:value="${code}">
+                        <label th:text="${code}"></label>
+                    </div>
+                </li>
+            </ul>
+            <div class="field">
+                <button class="ui button" type="submit">Submit</button>
+            </div>
+        </form>
+    </body>
+</html>

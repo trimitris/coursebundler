@@ -224,4 +224,6 @@ public class Data {
     public int getNumCourses(){
         return this.numCourses;
     }
+
+    public String[] getCourseCodes(){ return this.courseCodes; }
 }
