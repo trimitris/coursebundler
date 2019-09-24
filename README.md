@@ -17,7 +17,7 @@ Extra features:
 - for each module selection, show possible alternatives, e.g. selections with only 1 different module. Can use similar strategy to git, that shows in red what is removed and in green what is to be added
 - Descriptions of modules 
 
-## Instructions of use (Tested with `Ubuntu 
+## Instructions of use (Tested with `Ubuntu 18.04`)
 - If java is not installed on your system, follow these instructions to install it: https://itsfoss.com/install-java-ubuntu/
 - Download the project repository on your local machine (can use `git clone`)
 - `cd coursebundler/`
