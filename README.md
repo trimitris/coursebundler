@@ -22,7 +22,7 @@ Extra features:
 - Download the project repository on your local machine (can use `git clone`)
 - `cd coursebundler/`
 - Run the server with: `java -jar build/libs/gs-handling-form-submission-0.1.0.jar`
-- Finally, open your browser and go to: localhost:8080/select-courses
+- Finally, open your browser and go to: http://localhost:8080/select-courses
 - Select a few courses from the appearing list of course codes
 - Click "submit"
-- Click "Get Bundles" on the appearing page. If nothing happens, this means the courses selected on the previous page do not produce a valid course combination, so go back to localhost:8080/select-courses, and select more courses
+- Click "Get Bundles" on the appearing page. If nothing happens, this means the courses selected on the previous page do not produce a valid course combination, so go back to http://localhost:8080/select-courses, and select more courses
